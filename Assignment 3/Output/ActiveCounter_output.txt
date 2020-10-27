@@ -1,0 +1,2 @@
+(base) vasus-MacBook-Pro:Assignment 3 vasunegi$ python3 ActiveCounter.py
+Value of active counter: 999696
