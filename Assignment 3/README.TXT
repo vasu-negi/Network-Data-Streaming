@@ -15,6 +15,9 @@ In order to run these programs on *nix based/MAC system, follow the instructions
 
 Run: python3 CountMin.py
 
+
+For Demo, following values are taken: n = 10,000, k = 3, w = 3000
+
 Functions:
 
 1. def query(self,key):
@@ -41,6 +44,8 @@ The output files are in the Output folder.
 
 Run:  python3 CounterSketch.py
 
+For demo: following values are taken: n = 10,000, k = 3, w = 3000
+
 Functions:
 
 1. def query(self,key):
@@ -66,6 +71,8 @@ The output files are in the Output folder.
 ##########ActiveCounter##############
 
 Run: python3 ActiveCounter.py
+
+For demo, counter will run 1,000,000 times, and number part is of 16 bits and exponent is of 16 bits.
 
 Functions:
 
