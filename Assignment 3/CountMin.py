@@ -11,6 +11,7 @@ class CountMin:
         self.w = w
         self.counter_matrix = [[0] * w for _ in range(k)]
         self.k = k
+       
         self.random_numbers = self.generate_random_numbers()
 
     # static method for checking the inputs before assigning them to any variable
@@ -42,7 +43,7 @@ class CountMin:
 
     # generate hashfunctions with the following function - > (number XOR i) where i is any random number in the self.random_nums
     def get_hash_functions(self, number):
-        return [(int(hash(number) ^ i)) % self.w for i in self.random_numbers]
+        return [(int((hash(number) & 0xffffffff ) ^ i)) % self.w for i in self.random_numbers]
 
     #Record the sizes of all flows in the counter,query to evaluate estimated sizes of all flows,
     #query for all flows, and calculate  the average error of all flows.
