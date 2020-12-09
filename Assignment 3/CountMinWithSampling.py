@@ -36,18 +36,17 @@ class CountMin:
     def recording(self,key):
         hash_table_indices = self.get_hash_functions(key.flowid)
         for i, j in zip(range(self.k), hash_table_indices):
-            
             j = j % self.w
-            self.counter_matrix[i][j] += int(key.number_of_packets)
+            self.counter_matrix[i][j] += 1
             
     
     # generate random numbers
     def generate_random_numbers(self):
-        return random.sample(range(1, self.w * 100), self.k)
+        return random.sample(range(1, self.INTEGER_MAX), self.k)
 
     # generate hashfunctions with the following function - > (number XOR i) where i is any random number in the self.random_nums
     def get_hash_functions(self, number):
-        return [(int( ( hash(number) & 0xffffffff ) ^ i)) for i in self.random_numbers]
+        return [(int( ( hash(number)) ^ i)) for i in self.random_numbers]
 
     #Record the sizes of all flows in the counter,query to evaluate estimated sizes of all flows,
     #query for all flows, and calculate  the average error of all flows.
@@ -55,22 +54,23 @@ class CountMin:
     def execute(self):
         for key in self.flows:
             # Sampling done Here
-            random_num = random.randint(0, self.INTEGER_MAX)
-            if int (hash(key.flowid) & 0xffffffff ) ^  random_num < (self.p * self.INTEGER_MAX):
-                self.recording(key)
+            for _ in range(int(key.number_of_packets)):
+                random_num = random.randint(0, self.w * 100)
+                if random_num < (self.p * self.w * 100):
+                    self.recording(key)
 
         avg_error = 0 
-        heap = []
+        #heap = []
         for key in self.flows:
             val = key.number_of_packets
             query_out = self.query(key)
-            heap.append((query_out, key))
+            #heap.append((query_out, key))
             avg_error += abs(query_out - int(val))
 
-        print("The average error among all flows:",  avg_error// self.n)
-        largest = sorted(heap, key = lambda x: -x[0])[:100]
-        for val,key in largest:
-            print(str(key.flowid) + "\t\t" + str(val) + "\t\t" + str(key.number_of_packets))
+        print( "The average error among all flows:", avg_error// self.n , "Sampling Probability:", self.p)
+        # largest = sorted(heap, key = lambda x: -x[0])[:100]
+        # for val,key in largest:
+        #     print(str(key.flowid) + "\t\t" + str(val) + "\t\t" + str(key.number_of_packets))
 
 
 class Flow:
@@ -80,11 +80,11 @@ class Flow:
         self.number_of_packets = y
         
 if __name__ == '__main__':
-        n, k, w, p  = 0,3,3000,  1
+        n, k, w = 0,8,3000
+        p = 0.8
         flows = []
         with open('project3input.txt') as input:
             n = int(input.readline())
-            print(n)
             for i in range(n):
                 flows.append(Flow(input.readline()))
         c = CountMin(n, k,w,p,flows)
